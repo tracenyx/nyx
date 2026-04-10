@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/assets/nyx-logo.png" alt="Nyx" width="120"/>
+<img src="docs/assets/mainlogo.png" alt="Nyx" width="120"/>
 
 # Nyx
 
@@ -99,7 +99,7 @@ kubectl get pods -n nyx-system
 
 ## Your First Policy
 
-### Default deny — cross-namespace traffic
+### Default deny — cross-namespace traffic 
 
 ```yaml
 apiVersion: nyx.tracenyx.io/v1alpha1
@@ -117,14 +117,14 @@ spec:
       matchExpressions:
       - key: kubernetes.io/metadata.name
         operator: NotIn
-        values: ["kube-system", "nyx-system"]
+        values: ["payment-ns"]
   egress:
   - decision: Deny
     toNamespaceSelector:
       matchExpressions:
       - key: kubernetes.io/metadata.name
         operator: NotIn
-        values: ["kube-system", "nyx-system"]
+        values: ["payment-ns"]
 ```
 
 ### Allow specific service traffic
