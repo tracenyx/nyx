@@ -33,7 +33,6 @@ Even on Linux, the default Kubernetes NetworkPolicy is limited. No deny rules. N
 | Unified Linux + Windows UI | ❌ | ❌ | ✅ |
 | AI observability | ❌ | ❌ | ✅ |
 | Natural language policy | ❌ | ❌ | ✅ |
-| Cluster footprint | 20+ components | 15+ components | **2 components** |
 
 ---
 
@@ -220,7 +219,7 @@ See more examples → [github.com/tracenyx/nyx-examples](https://github.com/trac
 | **Namespaces** | 3 | 20 | Unlimited |
 | **Clusters** | 1 | 3 | Unlimited |
 | **Linux eBPF** | ✅ | ✅ | ✅ |
-| **Windows WFP** | 30-day trial | ✅ | ✅ |
+| **Windows WFP** | ✅ | ✅ | ✅ |
 | **AI anomaly detection** | 50/day | 500/day | Unlimited |
 | **AI policy generation** | 10/day | 100/day | Unlimited |
 | **Flow log retention** | 7 days | 90 days | 180 days |
@@ -243,6 +242,11 @@ Nyx analyses your actual flow logs and Kubernetes metadata — not generic secur
 - **Policy conflict detection** — flags contradictions before you apply them
 - **Compliance gap analysis** — maps your policy coverage against SOC2, PCI-DSS, HIPAA (Aegis)
 - **"Why was this blocked?"** — AI explains any policy decision in plain language
+- **FQDN egress interrogation** — ask in plain English:
+  _"Has any pod attempted egress to sfrclak.com in the last 24 hours?"_
+  _"Which pods are making unexpected calls to blob.core.windows.net?"_
+  _"Show me all egress to domains not on our approved list"_
+  Nyx queries your flow logs and returns precise, actionable answers
 
 > All AI processing happens within Tracenyx infrastructure. We send only anonymised, aggregated traffic patterns to our AI provider — never pod names, IP addresses, or raw flow records. Aegis customers can enable Private AI mode for fully isolated processing.
 
