@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/assets/mainlogo.png" alt="Nyx" width="120"/>
+<img src="docs/assets/nyx-mark-v2.png" alt="Nyx" width="120"/>
 
 # Nyx
 
@@ -8,13 +8,13 @@
 
 Zero trust from the kernel up. One policy model for Linux and Windows.
 
+[![Status](https://img.shields.io/badge/status-GA-2BD9FF.svg)](https://tracenyx.ai)
 [![License](https://img.shields.io/badge/license-Proprietary-blue.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20Windows-brightgreen.svg)]()
 [![Kubernetes](https://img.shields.io/badge/kubernetes-1.26%2B-blue.svg)]()
-[![Early Access](https://img.shields.io/badge/status-Early%20Access-orange.svg)](https://tracenyx.ai)
+[![Docs](https://img.shields.io/badge/docs-tracenyx.ai-3A7BFF.svg)](https://docs.tracenyx.ai)
 
-[Website](https://tracenyx.ai) · [Docs](https://docs.tracenyx.ai) · [Blog](https://blog.tracenyx.ai) · [Get Started Free](https://tracenyx.ai#contact)
-
+[Website](https://tracenyx.ai) · [Docs](https://docs.tracenyx.ai) · [Blog](https://blog.tracenyx.ai) · [Get Started Free](https://app.tracenyx.ai/signup)
 </div>
 
 ---
@@ -76,13 +76,18 @@ Two components run in your cluster — one DaemonSet for enforcement, one Deploy
 helm repo add tracenyx https://charts.tracenyx.ai
 helm repo update
 
-helm install nyx tracenyx/nyx \
+helm install nyx \
+  oci://tracenyxpublic.azurecr.io/helm/nyx \
+  --version 0.1.0 \
   --namespace nyx-system \
   --create-namespace \
-  --set license.key=YOUR_SCOUT_KEY
+  --set global.scout.key=<YOUR_SCOUT_KEY> \
+  --set global.image.registry=<YOUR_IMAGE_REGISTRY> \
 ```
 
-Get your free Scout key → [tracenyx.ai](https://tracenyx.ai)
+Go to [app.tracenyx.ai/signup](https://app.tracenyx.ai/signup) and
+sign up for **Scout** — the free tier built for individuals and first
+clusters. No credit card required.
 
 ### Verify
 
@@ -90,8 +95,8 @@ Get your free Scout key → [tracenyx.ai](https://tracenyx.ai)
 kubectl get pods -n nyx-system
 
 # Expected output:
-# nyx-daemonset-xxxxx    Running   (one per node)
-# nyx-gatekeeper-xxxxx   Running   (one deployment)
+# nyx-agent-xxxxx               Running   (one per node)
+# nyx-admission-webhook-xxxxx   Running   (one deployment)
 ```
 
 ---
@@ -146,7 +151,7 @@ spec:
     fromPodSelector:
       matchLabels:
         app: frontend
-    toPorts:
+    ports:
       port: 8080
       protocol: TCP
 ```
@@ -169,16 +174,17 @@ spec:
   - decision: Allow
     toFqdn:
       matchName: api.stripe.com
-    toPorts:
-      port: 443
+    ports:
+      - port: 8983
+        protocol: TCP
   - decision: Allow
     toFqdn:
-      matchName: approved-storage.blob.core.windows.net
-    toPorts:
-      port: 443
+      - matchName: nyxdemoapp.blob.core.windows.net
+    ports:
+      - port: 443
+        protocol: TCP
   - decision: Deny
-    toFqdn:
-      matchPattern: "*.blob.core.windows.net"
+    toNamespaceSelector: {}
 ```
 
 > Traditional firewalls see an IP address. Nyx sees a hostname. For services like Azure Blob Storage where multiple tenants share the same IP range, that difference is everything.
@@ -195,8 +201,8 @@ See more examples → [github.com/tracenyx/nyx-examples](https://github.com/trac
 | Windows Server 2022 (WFP) | Kernel-level | ✅ GA |
 | AKS (Azure) | ✅ | Tested |
 | EKS (AWS) | ✅ | Tested |
-| GKE (Google Cloud) | ✅ | Tested |
-| On-premise | ✅ | Tested |
+| GKE (Google Cloud) | ✅ | In validation |
+| On-premise | ✅ | In validation |
 | Mixed Linux + Windows | ✅ | Tested |
 
 ---
@@ -215,19 +221,27 @@ See more examples → [github.com/tracenyx/nyx-examples](https://github.com/trac
 
 | Feature | Scout | Sentinel | Aegis |
 |---|---|---|---|
-| **Price** | Free | Per namespace | Custom ACV |
-| **Namespaces** | 3 | 20 | Unlimited |
-| **Clusters** | 1 | 3 | Unlimited |
-| **Linux eBPF** | ✅ | ✅ | ✅ |
-| **Windows WFP** | ✅ | ✅ | ✅ |
-| **AI anomaly detection** | 50/day | 500/day | Unlimited |
-| **AI policy generation** | 10/day | 100/day | Unlimited |
-| **Flow log retention** | 7 days | 90 days | 180 days |
-| **Observability dashboard** | Basic | Full | Full |
-| **Support** | GitHub Issues | Email | Dedicated SLA |
-| **Data region** | Auto (AU East) | Auto | Preferred |
-| **SSO / RBAC** | ❌ | ❌ | ✅ |
-| **Git policy integration** | ❌ | ❌ | Roadmap |
+| **Price** | Free | Talk to us | Custom |
+| **Best for** | Individuals & first clusters | Teams on Kubernetes | Regulated, multi-cluster estates |
+| **Namespaces** | 3 | 25–50 | Unlimited |
+| **Clusters** | 1 | 5–10 | Unlimited |
+| **Enforcement** | | | |
+| Linux eBPF enforcement | ✅ | ✅ | ✅ |
+| Windows WFP enforcement | ✅ | ✅ | ✅ |
+| Dry-run / audit / enforce modes | ✅ | ✅ | ✅ |
+| **AI** | | | |
+| AI anomaly detection | Limited | More | Unlimited |
+| AI policy generation | Limited | More | Unlimited |
+| Private AI (no third-party processing) | — | — | ✅ |
+| **Platform** | | | |
+| Observability dashboard | Core | Full | Full |
+| Flow log retention | 7 days | 90 days | 180 days |
+| SSO / RBAC | — | ✅ | ✅ |
+| Guided rollout | — | — | ✅ |
+| Git policy integration | — | — | Roadmap |
+| **Support & compliance** | | | |
+| Support | GitHub Issues | Email | Dedicated SLA |
+| Data region | Auto (AU East) | Auto | Preferred |
 
 [Start free with Scout →](https://tracenyx.ai)
 
