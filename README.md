@@ -319,10 +319,8 @@ Follow the tutorial → [github.com/tracenyx/nyx-demo](https://github.com/tracen
 
 ## Documentation
 
-- [Getting Started](https://docs.tracenyx.ai/getting-started)
-- [Policy Model](https://docs.tracenyx.ai/policy-model)
-- [Architecture](https://docs.tracenyx.ai/architecture)
-- [CRD Reference](https://docs.tracenyx.ai/api-reference)
+- [Getting Started](https://docs.tracenyx.ai/quickstart)
+- [CRD Reference](https://docs.tracenyx.ai/reference/nyxnetworkpolicy)
 - [CloudMart Tutorial](https://github.com/tracenyx/nyx-demo)
 
 ---
@@ -339,7 +337,7 @@ We aim to respond to all security disclosures within 24 hours.
 
 ## License
 
-Nyx is proprietary software. The Scout tier is free to use under the [Scout License Terms](https://tracenyx.ai/legal/scout-license). Commercial use requires a license key.
+Nyx is proprietary software. The Scout tier is free to use under the [Scout License Terms](https://tracenyx.ai/scout-license). Commercial use requires a license key.
 
 © 2026 Tracenyx Pty Ltd. All rights reserved.
 
